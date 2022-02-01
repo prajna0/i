@@ -252,7 +252,7 @@ print_system_info() {
     else
         echo " CPU 型号          : $(_blue "无法检测到CPU型号")"
     fi
-    echo " CPU 核心数        : $(_blue "$cores")"
+    echo " CPU 核心数       : $(_blue "$cores")"
     if [ -n "$freq" ]; then
         echo " CPU 频率          : $(_blue "$freq MHz")"
     fi
