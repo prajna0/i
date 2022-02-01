@@ -39,7 +39,7 @@ _exists() {
 }
 
 _exit() {
-    _red "\nThe script has been terminated.\n"
+    _red "\n脚本已经被终止运行了\n"
     # clean up
     rm -fr speedtest.tgz speedtest-cli benchtest_*
     exit 1
