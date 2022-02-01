@@ -1,5 +1,12 @@
 #!/usr/bin/env bash
-
+#
+# Description: Auto test download & I/O speed script
+#
+# Copyright (C) 2015 - 2022 Teddysun <i@teddysun.com>
+# Thanks: LookBack <admin@dwhd.org>
+# URL: https://teddysun.com/444.html
+# https://github.com/teddysun/across/blob/master/bench.sh
+#
 trap _exit INT QUIT TERM
 
 _red() {
@@ -32,7 +39,7 @@ _exists() {
 }
 
 _exit() {
-    _red "\n脚本已被终止\n"
+    _red "\nThe script has been terminated.\n"
     # clean up
     rm -fr speedtest.tgz speedtest-cli benchtest_*
     exit 1
@@ -64,20 +71,20 @@ speed_test() {
 
 speed() {
     speed_test '' 'Speedtest.net'
-    speed_test '5145' '北京, 中国联通'
-    speed_test '3633' '上海, 中国电信'
-    speed_test '27594' '广州, 中国电信'
-    speed_test '23844' '武汉, 中国电信'
-    speed_test '26352' '南京, 中国电信'
-    speed_test '32155' '香港, 中国移动'
-    speed_test '15047' '东京, 日本'
-    speed_test '6527'  '首尔, 韩国'
-    speed_test '25960' '新加坡, 新加坡'
-    speed_test '21541' '洛杉矶, 美国'
-    speed_test '43860' '达拉斯, 美国'
-    speed_test '40879' '蒙特利尔, 加拿大'
-    speed_test '24215' '巴黎, 法国'
-    speed_test '28922' '阿姆斯特丹, 荷兰'
+    speed_test '5145' 'Beijing, CN'
+    speed_test '24447' 'Shanghai, CN'
+    speed_test '23844' 'Wuhan, CN'
+    speed_test '26352' 'Nanjing, CN'
+    speed_test '27594' 'Guangzhou, CN'
+    speed_test '32155' 'Hongkong, CN'
+    speed_test '6527'  'Seoul, KR'
+    speed_test '15047' 'Tokyo, JP'
+    speed_test '25960' 'Singapore, SG'
+    speed_test '21541' 'Los Angeles, US'
+    speed_test '43860' 'Dallas, US'
+    speed_test '40879' 'Montreal, CA'
+    speed_test '24215' 'Paris, FR'
+    speed_test '28922' 'Amsterdam, NL'
 }
 
 io_test() {
@@ -157,16 +164,16 @@ ipv4_info() {
     local country="$(wget -q -T10 -O- ipinfo.io/country)"
     local region="$(wget -q -T10 -O- ipinfo.io/region)"
     if [[ -n "$org" ]]; then
-        echo " ASN组织: $(_blue "$org")"
+        echo " Organization       : $(_blue "$org")"
     fi
     if [[ -n "$city" && -n "country" ]]; then
-        echo " 位置: $(_blue "$city / $country")"
+        echo " Location           : $(_blue "$city / $country")"
     fi
     if [[ -n "$region" ]]; then
-        echo " 地区: $(_yellow "$region")"
+        echo " Region             : $(_yellow "$region")"
     fi
     if [[ -z "$org" ]]; then
-        echo " 地区: $(_red "No ISP detected")"
+        echo " Region             : $(_red "No ISP detected")"
     fi
 }
 
@@ -205,11 +212,6 @@ install_speedtest() {
     fi
 }
 
-print_intro() {
-    echo "--------------------------- A Bench Script ---------------------------"
-    echo " 版本               : $(_green 2022年02月01日)"
-    echo " 使用               : $(_red "wget -qO- bench.sh | bash")"
-}
 
 # Get System information
 get_system_info() {
@@ -244,27 +246,27 @@ get_system_info() {
 # Print System information
 print_system_info() {
     if [ -n "$cname" ]; then
-        echo " CPU 型号: $(_blue "$cname")"
+        echo " CPU Model          : $(_blue "$cname")"
     else
-        echo " CPU 型号: $(_blue "无法检测到CPU型号")"
+        echo " CPU Model          : $(_blue "CPU model not detected")"
     fi
-    echo " CPU 核心数: $(_blue "$cores")"
+    echo " CPU Cores          : $(_blue "$cores")"
     if [ -n "$freq" ]; then
-        echo " CPU 频率: $(_blue "$freq MHz")"
+        echo " CPU Frequency      : $(_blue "$freq MHz")"
     fi
     if [ -n "$ccache" ]; then
-        echo " CPU 缓存: $(_blue "$ccache")"
+        echo " CPU Cache          : $(_blue "$ccache")"
     fi
-    echo " 硬盘空间: $(_yellow "$disk_total_size GB") $(_blue "(已用 $disk_used_size GB)")"
-    echo " 内存: $(_yellow "$tram MB") $(_blue "(已用 $uram MB)")"
-    echo " Swap: $(_blue "$swap MB (已用 $uswap MB)")"
-    echo " 系统在线时间: $(_blue "$up")"
-    echo " 平均负载: $(_blue "$load")"
-    echo " 系统: $(_blue "$opsy")"
-    echo " 架构: $(_blue "$arch ($lbit Bit)")"
-    echo " 内核: $(_blue "$kern")"
-    echo " TCP加速方式: $(_yellow "$tcpctrl")"
-    echo " 虚拟化架构: $(_blue "$virt")"
+    echo " Total Disk         : $(_yellow "$disk_total_size GB") $(_blue "($disk_used_size GB Used)")"
+    echo " Total Mem          : $(_yellow "$tram MB") $(_blue "($uram MB Used)")"
+    echo " Total Swap         : $(_blue "$swap MB ($uswap MB Used)")"
+    echo " System uptime      : $(_blue "$up")"
+    echo " Load average       : $(_blue "$load")"
+    echo " OS                 : $(_blue "$opsy")"
+    echo " Arch               : $(_blue "$arch ($lbit Bit)")"
+    echo " Kernel             : $(_blue "$kern")"
+    echo " TCP CC             : $(_yellow "$tcpctrl")"
+    echo " Virtualization     : $(_blue "$virt")"
 }
 
 print_io_test() {
@@ -275,11 +277,11 @@ print_io_test() {
     if [ ${freespace} -gt 1024 ]; then
         writemb=2048
         io1=$( io_test ${writemb} )
-        echo " 磁盘I/O (第1次) : $(_yellow "$io1")"
+        echo " I/O Speed(1st run) : $(_yellow "$io1")"
         io2=$( io_test ${writemb} )
-        echo " 磁盘I/O (第2次) : $(_yellow "$io2")"
+        echo " I/O Speed(2nd run) : $(_yellow "$io2")"
         io3=$( io_test ${writemb} )
-        echo " 磁盘I/O (第3次) : $(_yellow "$io3")"
+        echo " I/O Speed(3rd run) : $(_yellow "$io3")"
         ioraw1=$( echo $io1 | awk 'NR==1 {print $1}' )
         [ "`echo $io1 | awk 'NR==1 {print $2}'`" == "GB/s" ] && ioraw1=$( awk 'BEGIN{print '$ioraw1' * 1024}' )
         ioraw2=$( echo $io2 | awk 'NR==1 {print $1}' )
@@ -288,7 +290,7 @@ print_io_test() {
         [ "`echo $io3 | awk 'NR==1 {print $2}'`" == "GB/s" ] && ioraw3=$( awk 'BEGIN{print '$ioraw3' * 1024}' )
         ioall=$( awk 'BEGIN{print '$ioraw1' + '$ioraw2' + '$ioraw3'}' )
         ioavg=$( awk 'BEGIN{printf "%.1f", '$ioall' / 3}' )
-        echo " 磁盘I/O (平均结果) : $(_yellow "$ioavg MB/s")"
+        echo " I/O Speed(average) : $(_yellow "$ioavg MB/s")"
     else
         echo " $(_red "Not enough space for I/O Speed test!")"
     fi
@@ -300,12 +302,12 @@ print_end_time() {
     if [ ${time} -gt 60 ]; then
         min=$(expr $time / 60)
         sec=$(expr $time % 60)
-        echo " 总耗时: ${min} min ${sec} sec"
+        echo " Finished in        : ${min} min ${sec} sec"
     else
-        echo " 总耗时: ${time} sec"
+        echo " Finished in        : ${time} sec"
     fi
     date_time=$(date +%Y-%m-%d" "%H:%M:%S)
-    echo " 当前时间: $date_time"
+    echo " Timestamp          : $date_time"
 }
 
 ! _exists "wget" && _red "Error: wget command not found.\n" && exit 1
@@ -321,7 +323,7 @@ ipv4_info
 next
 print_io_test
 next
-install_speedtest && printf "%-18s%-18s%-20s%-12s\n" " 测速节点" "上传速度" "下载速度" "网络延迟"
+install_speedtest && printf "%-18s%-18s%-20s%-12s\n" " Node Name" "Upload Speed" "Download Speed" "Latency"
 speed && rm -fr speedtest-cli
 next
 print_end_time
