@@ -250,7 +250,7 @@ print_system_info() {
     if [ -n "$cname" ]; then
         echo " CPU 型号          : $(_blue "$cname")"
     else
-        echo " CPU 型号          : $(_blue "CPU model not detected")"
+        echo " CPU 型号          : $(_blue "无法检测到CPU型号")"
     fi
     echo " CPU 核心数        : $(_blue "$cores")"
     if [ -n "$freq" ]; then
