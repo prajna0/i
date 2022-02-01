@@ -161,16 +161,16 @@ ipv4_info() {
     local country="$(wget -q -T10 -O- ipinfo.io/country)"
     local region="$(wget -q -T10 -O- ipinfo.io/region)"
     if [[ -n "$org" ]]; then
-        echo " ASN组织       : $(_blue "$org")"
+        echo " ASN组织           : $(_blue "$org")"
     fi
     if [[ -n "$city" && -n "country" ]]; then
-        echo " 位置           : $(_blue "$city / $country")"
+        echo " 位置              : $(_blue "$city / $country")"
     fi
     if [[ -n "$region" ]]; then
-        echo " 地区             : $(_yellow "$region")"
+        echo " 地区              : $(_yellow "$region")"
     fi
     if [[ -z "$org" ]]; then
-        echo " 地区             : $(_red "No ISP detected")"
+        echo " 地区              : $(_red "No ISP detected")"
     fi
 }
 
@@ -211,8 +211,8 @@ install_speedtest() {
 
 print_intro() {
     echo "--------------------------- A Bench Script ---------------------------"
-    echo " Version            : $(_green 2022年02月01日)"
-    echo " Usage              : $(_red "wget -qO- bench.sh | bash")"
+    echo " 版本               : $(_green 2022年02月01日)"
+    echo " 使用               : $(_red "wget -qO- bench.sh | bash")"
 }
 
 # Get System information
@@ -259,16 +259,16 @@ print_system_info() {
     if [ -n "$ccache" ]; then
         echo " CPU 缓存          : $(_blue "$ccache")"
     fi
-    echo " 硬盘空间         : $(_yellow "$disk_total_size GB") $(_blue "($disk_used_size GB Used)")"
-    echo " 内存          : $(_yellow "$tram MB") $(_blue "($uram MB Used)")"
-    echo " Swap         : $(_blue "$swap MB ($uswap MB Used)")"
+    echo " 硬盘空间          : $(_yellow "$disk_total_size GB") $(_blue "(已用 $disk_used_size GB)")"
+    echo " 内存              : $(_yellow "$tram MB") $(_blue "(已用 $uram MB)")"
+    echo " Swap              : $(_blue "$swap MB (已用 $uswap MB)")"
     echo " 系统在线时间      : $(_blue "$up")"
-    echo " 平均负载       : $(_blue "$load")"
-    echo " 系统                 : $(_blue "$opsy")"
-    echo " 架构               : $(_blue "$arch ($lbit Bit)")"
-    echo " 内核             : $(_blue "$kern")"
-    echo " TCP加速方式             : $(_yellow "$tcpctrl")"
-    echo " 虚拟化架构     : $(_blue "$virt")"
+    echo " 平均负载          : $(_blue "$load")"
+    echo " 系统              : $(_blue "$opsy")"
+    echo " 架构              : $(_blue "$arch ($lbit Bit)")"
+    echo " 内核              : $(_blue "$kern")"
+    echo " TCP加速方式       : $(_yellow "$tcpctrl")"
+    echo " 虚拟化架构        : $(_blue "$virt")"
 }
 
 print_io_test() {
@@ -304,12 +304,12 @@ print_end_time() {
     if [ ${time} -gt 60 ]; then
         min=$(expr $time / 60)
         sec=$(expr $time % 60)
-        echo " 总耗时        : ${min} min ${sec} sec"
+        echo " 总耗时          : ${min} min ${sec} sec"
     else
-        echo " 总耗时        : ${time} sec"
+        echo " 总耗时          : ${time} sec"
     fi
     date_time=$(date +%Y-%m-%d" "%H:%M:%S)
-    echo " 当前时间          : $date_time"
+    echo " 当前时间      : $date_time"
 }
 
 ! _exists "wget" && _red "Error: wget command not found.\n" && exit 1
@@ -325,7 +325,7 @@ ipv4_info
 next
 print_io_test
 next
-install_speedtest && printf "%-18s%-18s%-20s%-12s\n" " 测速节点" "上传速度" "下载速度" "延迟"
+install_speedtest && printf "%-18s%-18s%-20s%-12s\n" " 测速节点" "上传速度" "下载速度" "网络延迟"
 speed && rm -fr speedtest-cli
 next
 print_end_time
