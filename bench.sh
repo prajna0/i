@@ -248,27 +248,27 @@ get_system_info() {
 # Print System information
 print_system_info() {
     if [ -n "$cname" ]; then
-        echo " CPU 型号          : $(_blue "$cname")"
+        echo " CPU 型号: $(_blue "$cname")"
     else
-        echo " CPU 型号          : $(_blue "无法检测到CPU型号")"
+        echo " CPU 型号: $(_blue "无法检测到CPU型号")"
     fi
-    echo " CPU 核心数   : $(_blue "$cores")"
+    echo " CPU 核心数: $(_blue "$cores")"
     if [ -n "$freq" ]; then
-        echo " CPU 频率          : $(_blue "$freq MHz")"
+        echo " CPU 频率: $(_blue "$freq MHz")"
     fi
     if [ -n "$ccache" ]; then
-        echo " CPU 缓存          : $(_blue "$ccache")"
+        echo " CPU 缓存: $(_blue "$ccache")"
     fi
-    echo " 硬盘空间          : $(_yellow "$disk_total_size GB") $(_blue "(已用 $disk_used_size GB)")"
-    echo " 内存              : $(_yellow "$tram MB") $(_blue "(已用 $uram MB)")"
-    echo " Swap              : $(_blue "$swap MB (已用 $uswap MB)")"
-    echo " 系统在线时间      : $(_blue "$up")"
-    echo " 平均负载          : $(_blue "$load")"
-    echo " 系统              : $(_blue "$opsy")"
-    echo " 架构              : $(_blue "$arch ($lbit Bit)")"
-    echo " 内核              : $(_blue "$kern")"
-    echo " TCP加速方式       : $(_yellow "$tcpctrl")"
-    echo " 虚拟化架构        : $(_blue "$virt")"
+    echo " 硬盘空间: $(_yellow "$disk_total_size GB") $(_blue "(已用 $disk_used_size GB)")"
+    echo " 内存: $(_yellow "$tram MB") $(_blue "(已用 $uram MB)")"
+    echo " Swap: $(_blue "$swap MB (已用 $uswap MB)")"
+    echo " 系统在线时间: $(_blue "$up")"
+    echo " 平均负载: $(_blue "$load")"
+    echo " 系统: $(_blue "$opsy")"
+    echo " 架构: $(_blue "$arch ($lbit Bit)")"
+    echo " 内核: $(_blue "$kern")"
+    echo " TCP加速方式: $(_yellow "$tcpctrl")"
+    echo " 虚拟化架构: $(_blue "$virt")"
 }
 
 print_io_test() {
@@ -279,11 +279,11 @@ print_io_test() {
     if [ ${freespace} -gt 1024 ]; then
         writemb=2048
         io1=$( io_test ${writemb} )
-        echo " 磁盘I/O (第一次) : $(_yellow "$io1")"
+        echo " 磁盘I/O (第1次) : $(_yellow "$io1")"
         io2=$( io_test ${writemb} )
-        echo " 磁盘I/O (第二次) : $(_yellow "$io2")"
+        echo " 磁盘I/O (第2次) : $(_yellow "$io2")"
         io3=$( io_test ${writemb} )
-        echo " 磁盘I/O (第三次) : $(_yellow "$io3")"
+        echo " 磁盘I/O (第3次) : $(_yellow "$io3")"
         ioraw1=$( echo $io1 | awk 'NR==1 {print $1}' )
         [ "`echo $io1 | awk 'NR==1 {print $2}'`" == "GB/s" ] && ioraw1=$( awk 'BEGIN{print '$ioraw1' * 1024}' )
         ioraw2=$( echo $io2 | awk 'NR==1 {print $1}' )
@@ -304,12 +304,12 @@ print_end_time() {
     if [ ${time} -gt 60 ]; then
         min=$(expr $time / 60)
         sec=$(expr $time % 60)
-        echo " 总耗时          : ${min} min ${sec} sec"
+        echo " 总耗时: ${min} min ${sec} sec"
     else
-        echo " 总耗时          : ${time} sec"
+        echo " 总耗时: ${time} sec"
     fi
     date_time=$(date +%Y-%m-%d" "%H:%M:%S)
-    echo " 当前时间      : $date_time"
+    echo " 当前时间: $date_time"
 }
 
 ! _exists "wget" && _red "Error: wget command not found.\n" && exit 1
